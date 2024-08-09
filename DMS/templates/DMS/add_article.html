@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Articles</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function addProductField() {
+            const container = document.getElementById('products-container');
+            const index = container.children.length;
+            const newField = `
+                <div class="product-field" id="product_field_${index}">
+                    <label for="product_name_${index}">Product Name:</label>
+                    <input type="text" name="product_name_${index}" id="product_name_${index}" required>
+                    <label for="product_description_${index}">Description:</label>
+                    <input type="text" name="product_description_${index}" id="product_description_${index}" required>
+                    <label for="product_price_${index}">Price:</label>
+                    <input type="number" name="product_price_${index}" id="product_price_${index}" step="0.01" required>
+                    <label for="product_category_${index}">Category:</label>
+                    <input type="text" name="product_category_${index}" id="product_category_${index}" required>
+                    <label for="product_image_${index}">Image URL:</label>
+                    <input type="file" name="product_image_${index}" id="product_image_${index}" required>
+                    <button type="button" onclick="removeProductField(${index})">Delete</button>
+                    <br><br>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', newField);
+        }
+        
+        function removeProductField(index) {
+            const field = document.getElementById(`product_field_${index}`);
+            if (field) {
+                field.remove();
+            }
+        }
+
+        $(document).ready(function(){
+    function updateQuarters(townFieldId, quarterFieldId) {
+        var townId = $(townFieldId).val();
+        var quarterField = $(quarterFieldId);
+        var url = "{% url 'dms:load_quarters' %}";  // Use the correct URL pattern for the load_quarters view
+        
+        $.ajax({
+            url: url,
+            data: {
+                'town': townId
+            },
+            success: function (data) {
+                $(quarterFieldId).html("");  // Clear the quarter options
+                $.each(data, function(key, value) {
+                    $(quarterFieldId).append($('<option></option>').val(value.id).text(value.quarter));
+                });
+            }
+        });
+    }
+
+    $("#id_sender_town").change(function(){
+        updateQuarters("#id_sender_town", "#id_sender_quarter");
+    });
+
+    $("#id_receiver_town").change(function(){
+        updateQuarters("#id_receiver_town", "#id_receiver_quarter");
+    });
+});
+        </script>
+        
+</head>
+<body>
+    <h1>Add Articles</h1>
+    <form id="articleForm" method="post" enctype="multipart/form-data" data-quarters-url="{% url 'dms:load_quarters' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div id="products-container">
+           
+        </div>
+
+        <button type="button" onclick="addProductField()">Add Product</button>
+        <br><br>
+        <input type="submit" value="Submit">    </form>
+</body>
+</html>

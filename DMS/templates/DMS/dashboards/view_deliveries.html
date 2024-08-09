@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <center> <a href="{% url 'home' %}" style="font-size: 10px;font-weight: 900;font-family: Verdana, Geneva, Tahoma, sans-serif;">HOME</a></center>
+
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-semibold text-center mb-6">Your Deliveries</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+            <thead>
+                <tr class="w-full bg-gray-200 text-gray-700">
+                    <th class="px-6 py-3 text-left text-sm font-medium">Delivery ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Order ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Start Time</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">End Time</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for delivery in deliveries %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ delivery.id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ delivery.order.id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ delivery.start_time }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ delivery.end_time }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ delivery.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

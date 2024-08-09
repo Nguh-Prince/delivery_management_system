@@ -1,0 +1,48 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold my-8 text-center">Make Order</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <form action="{% url 'make_order' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="delivery_address" class="block text-gray-700 text-sm font-bold mb-2">Delivery Address:</label>
+                    <input type="text" id="delivery_address" name="delivery_address" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Product</th>
+                            <th class="px-4 py-2">Quantity</th>
+                            <th class="px-4 py-2">Price</th>
+                            <th class="px-4 py-2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                            <tr>
+                                <td class="border px-4 py-2">{{ item.product.name }}</td>
+                                <td class="border px-4 py-2">{{ item.quantity }}</td>
+                                <td class="border px-4 py-2">{{ item.product.price }}</td>
+                                <td class="border px-4 py-2">{{ item.product.price|multiply:item.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Place Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

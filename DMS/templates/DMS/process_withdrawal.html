@@ -1,0 +1,11 @@
+{% extends "dms/home.html" %}
+
+{% block content %}
+<h1>Process Withdrawal</h1>
+<p>Withdrawal for Job: {{ job.job_name }}</p>
+<form method="post">
+    {% csrf_token %}
+    <textarea name="withdrawal_reason" placeholder="Reason for withdrawal"></textarea>
+    <button type="submit">Process Withdrawal</button>
+</form>
+{% endblock %}

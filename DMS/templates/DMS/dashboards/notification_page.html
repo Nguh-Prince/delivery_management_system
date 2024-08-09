@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.7/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-4">Notifications for {{ courier.user.username }}</h1>
+        
+        <section class="bg-white shadow-md rounded-lg mb-6 p-4">
+            <h2 class="text-2xl font-semibold mb-4">Unread Notifications</h2>
+            <ul class="space-y-4">
+                {% for notification in unread_notifications %}
+                    <li class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <p class="text-lg mb-2">{{ notification.message }}</p>
+                        <p class="text-sm text-gray-600">Sent by: {{ notification.sender.username }}</p>
+                        <p class="text-sm text-gray-600">Created at: {{ notification.created_at }}</p>
+                        <p class="text-sm text-gray-600">Status: 
+                            {% if notification.read %}
+                                <span class="text-green-600">Read</span>
+                            {% else %}
+                                <span class="text-red-600">Unread</span>
+                            {% endif %}
+                        </p>
+                    </li>
+                {% empty %}
+                    <li class="p-4 text-gray-600">No unread notifications.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-2xl font-semibold mb-4">Pending Orders</h2>
+            <ul class="space-y-4">
+                {% for order in pending_orders %}
+                    <li class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <p class="text-lg mb-2">Order #{{ order.id }}</p>
+                        <p class="text-sm text-gray-600">Client: {{ order.client.user.username }}</p>
+                        <p class="text-sm text-gray-600">Address: {{ order.delivery_address }}</p>
+                        <p class="text-sm text-gray-600">Created at: {{ order.created_at }}</p>
+                        <a href="{% url 'deliver_order' order.id %}" class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Deliver it</a>
+                    </li>
+                {% empty %}
+                    <li class="p-4 text-gray-600">No pending orders.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

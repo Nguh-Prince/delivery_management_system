@@ -1,0 +1,11 @@
+{% extends "dms/home.html" %}
+
+{% block content %}
+<h1>Process Refund</h1>
+<p>Refund for Job: {{ job.job_name }}</p>
+<form method="post">
+    {% csrf_token %}
+    <textarea name="reason" placeholder="Reason for refund"></textarea>
+    <button type="submit">Process Refund</button>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!-- dms/view_cart.html -->
+{% extends 'dms/home.html' %}
+
+{% block content %}
+<h1>Your Cart</h1>
+<ul>
+    {% for item in cart_items %}
+    <li>
+        {{ item.product.name }} - {{ item.quantity }} @ ${{ item.product.price }} each
+        Total: ${{ item.quantity * item.product.price }}
+    </li>
+    {% empty %}
+    <li>Your cart is empty.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

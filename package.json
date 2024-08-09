@@ -1,0 +1,19 @@
+{
+  "name": "delivery_management_system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "tailwindcss": "^3.4.7"
+  }
+  "scripts": {
+  "build:css": "tailwindcss build static/css/tailwind.css -o static/css/main.css"
+}
+
+}

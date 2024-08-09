@@ -1,0 +1,39 @@
+<!-- templates/dms/storekeeper_home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storekeeper Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+<style>
+    a {
+        color: chocolate;
+    }
+</style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-green-emeraude text-white p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold">Welcome to AZ Fast</h1>
+            <div class="space-x-4">
+                {% if user.is_authenticated %}
+        <h3>Welcome, {{ user.username }}!</h3>
+        <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+        <a href="{% url 'signup' %}">Sign Up</a> | 
+        <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+                <!-- <a href="{% url 'signup' %}" class="hover:text-gray-300">Sign Up</a> -->
+                <!-- <a href="{% url 'login' %}" class="hover:text-gray-300">Log In</a> -->
+                
+            </div>
+        </div>
+    </nav>
+<h2>Storekeeper Dashboard</h2>
+<p>Manage articles, notify couriers, and manage refunds.</p>
+<a href="{% url 'manage_articles' %}">Manage Articles</a><br>
+<a href="{% url 'notify_courier' %}">Notify Courier</a><br>
+<a href="{% url 'manage_refunds' %}">Manage Refunds</a>
+
+</body></html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-green-500 text-white p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold">Welcome to AZ Fast</h1>
+            <div class="space-x-4">
+                {% if user.is_authenticated %}
+                    <h3>Welcome, {{ user.username }}!</h3>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'signup' %}">Sign Up</a> | 
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <h2 class="text-2xl font-semibold mt-6">Manage Articles</h2>
+    
+    <table class="min-w-full mt-6 bg-white border border-gray-300">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Name</th>
+                <th class="py-2 px-4 border-b">Description</th>
+                <th class="py-2 px-4 border-b">Pickup Address</th>
+                <th class="py-2 px-4 border-b">Destination Address</th>
+                <th class="py-2 px-4 border-b">Products</th>
+                
+                <th class="py-2 px-4 border-b">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td class="py-2 px-4 border-b">{{ article.name }}</td>
+                <td class="py-2 px-4 border-b">{{ article.description }}</td>
+                <td class="py-2 px-4 border-b">{{ article.pickup_address }}</td>
+                <td class="py-2 px-4 border-b">{{ article.destination_address }}</td>
+                <td class="py-2 px-4 border-b">
+                    <ul>
+                        {% for product in article.products.all %}
+                        <li>
+                            <strong>{{ product.name }}</strong><br>
+                            Description: {{ product.description }}<br>
+                            Price: ${{ product.price }}<br>
+                            Category: {{ product.category }}<br>
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-20 h-20 object-cover">
+                        </li>
+                        {% empty %}
+                        <li>No products.</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                
+                <td class="py-2 px-4 border-b">{{ article.delivery_status }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="py-2 px-4 text-center">No articles found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- templates/admin/custom_user_form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin User Creation Form</title>
+    <script>
+        function toggleFields(role) {
+            document.getElementById('id_phone_number').parentNode.style.display = role ? '' : 'none';
+            document.getElementById('id_address').parentNode.style.display = role === 'client' ? '' : 'none';
+            document.getElementById('id_vehicle_details').parentNode.style.display = role === 'courier' ? '' : 'none';
+            document.getElementById('id_warehouse_location').parentNode.style.display = role === 'storekeeper' ? '' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleFields(document.getElementById('id_role').value);
+            document.getElementById('id_role').addEventListener('change', function() {
+                toggleFields(this.value);
+            });
+        });
+    </script>
+</head>
+
+<body class="bg-gray-100 p-6">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-6">Create New User</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="flex items-center justify-between">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Create User</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

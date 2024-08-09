@@ -1,0 +1,54 @@
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-green-emeraude text-white p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold">Welcome to AZ Fast</h1>
+            <div class="space-x-4">
+                {% if user.is_authenticated %}
+        <h3>Welcome, {{ user.username }}!</h3>
+        <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+        <a href="{% url 'signup' %}">Sign Up</a> | 
+        <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+                <!-- <a href="{% url 'signup' %}" class="hover:text-gray-300">Sign Up</a> -->
+                <!-- <a href="{% url 'login' %}" class="hover:text-gray-300">Log In</a> -->
+                
+            </div>
+        </div>
+    </nav>
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Welcome, {{ user.username }}!</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Manage Users -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Manage Users</h2>
+            <p class="mb-4">Add, edit, or delete users (Couriers, Storekeepers, Clients).</p>
+            <a href="{% url 'admin_form' %}" class="bg-red-500 text-white px-4 py-2 rounded">Manage Users</a>
+        </div>
+        
+        <!-- View Overall Information -->
+        <h1>Admin Overview</h1>
+        <ul>
+            <li>Total Users: {{ total_users }}</li>
+            <li>Total Clients: {{ total_clients }}</li>
+            <li>Total Couriers: {{ total_couriers }}</li>
+            <li>Total Storekeepers: {{ total_storekeepers }}</li>
+            <li>Total Products: {{ total_products }}</li>
+            <li>Total Articles: {{ total_articles }}</li>
+            <li>Total Orders: {{ total_orders }}</li>
+            <li>Total Deliveries: {{ total_deliveries }}</li>
+            <li>Total Notifications: {{ total_notifications }}</li>
+            <li>Total Reviews: {{ total_reviews }}</li>
+        </ul>
+        </div>
+</div>
+
+</body>
+</html>

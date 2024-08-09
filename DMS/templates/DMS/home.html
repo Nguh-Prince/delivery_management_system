@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Delivery App</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+     <style>
+        .bg-green-emeraude {
+            background-color: #008b8b; /* Adjust to the exact hex code for "green emeraude" */
+        }
+        .text-green-emeraude {
+            color: #008b8b; /* Adjust to the exact hex code for "green emeraude" */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-green-emeraude text-white p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold">Welcome to AZ Fast</h1>
+            <div class="space-x-4">
+                {% if user.is_authenticated %}
+        <h3>Welcome, {{ user.username }}!</h3>
+        <a href="{% url 'logout' %}">Logout</a>
+        
+        {% else %}
+        <a href="{% url 'signup' %}">Sign Up</a> | 
+        <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+                <!-- <a href="{% url 'signup' %}" class="hover:text-gray-300">Sign Up</a> -->
+                <!-- <a href="{% url 'login' %}" class="hover:text-gray-300">Log In</a> -->
+                
+            </div>
+        </div>
+        <a href="{% url 'add_articles' %}">Add Article</a>
+        
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Make Order -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Make Order</h2>
+            <p class="mb-4">Place a new order for delivery.</p>
+            <a href="{% url 'make_order' %}" class="bg-blue-500 text-white px-4 py-2 rounded">Make Order</a>
+        </div>
+        
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">See Articles</h2>
+            <p class="mb-4">See articles.</p>
+            <a href="{% url 'manage_articles' %}" class="bg-blue-500 text-white px-4 py-2 rounded">Make Order</a>
+        </div>
+
+        <!-- View Orders -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">View Orders</h2>
+            <p class="mb-4">Check the status of your orders.</p>
+            <a href="{% url 'view_orders' %}" class="bg-blue-500 text-white px-4 py-2 rounded">View Orders</a>
+        </div>
+        
+        <!-- View Products -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">View Products</h2>
+            <p class="mb-4">Take a look to our available products.</p>
+            <a href="{% url 'product_list' %}" class="bg-blue-500 text-white px-4 py-2 rounded">View Products</a>
+        </div>
+        
+
+        <!-- Manage Cart -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Manage Cart</h2>
+            <p class="mb-4">View and manage items in your cart.</p>
+            <a href="{% url 'view_cart' %}" class="bg-blue-500 text-white px-4 py-2 rounded">Manage Cart</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

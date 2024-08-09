@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold my-8 text-center">Your Cart</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <form action="{% url 'view_cart' %}" method="post">
+                {% csrf_token %}
+                
+                {% for item in cart_items %}
+                    <div class="mb-4 p-4 border-b flex items-center">
+                        <input type="checkbox" name="items_to_order" value="{{ item.id }}" class="mr-4">
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold">{{ item.product.name }}</h2>
+                            <p>{{ item.product.description }}</p>
+                            <p class="text-gray-700">Price: ${{ item.product.price }}</p>
+                            <p class="text-gray-700">Quantity: {{ item.quantity }}</p>
+                            <form action="{% url 'view_cart' %}" method="post" class="mt-4">
+                                {% csrf_token %}
+                                <input type="hidden" name="cart_item_id" value="{{ item.id }}"/>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="border p-2 rounded"/>
+                                <button type="submit" name="action" value="update" class="bg-blue-500 text-white py-2 px-4 rounded">Update</button>
+                                <button type="submit" name="action" value="remove" class="bg-red-500 text-white py-2 px-4 rounded">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded mt-6">Order Items</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

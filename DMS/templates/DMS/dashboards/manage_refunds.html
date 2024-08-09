@@ -1,0 +1,31 @@
+<!-- templates/dms/manage_refunds.html -->
+{% extends '../home.html' %}
+
+{% block title %}Manage Refunds{% endblock %}
+
+{% block content %}
+<h2>Manage Refunds</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Process Refund</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Reason</th>
+            <th>Approved</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for refund in refunds %}
+        <tr>
+            <td>{{ refund.order.id }}</td>
+            <td>{{ refund.reason }}</td>
+            <td>{{ refund.approved }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
