@@ -82,7 +82,6 @@ class DeliveryForm(forms.ModelForm):
         fields = ['status']
 
 class ArticleForm(forms.ModelForm):
-    # Fields for sender's address
     sender_town = forms.ModelChoiceField(
         queryset=Adresse.objects.values_list('town', flat=True).distinct(),
         label='Sender Town'
@@ -92,7 +91,6 @@ class ArticleForm(forms.ModelForm):
         label='Sender Quarter'
     )
     
-    # Fields for receiver's address
     receiver_town = forms.ModelChoiceField(
         queryset=Adresse.objects.values_list('town', flat=True).distinct(),
         label='Receiver Town'
@@ -105,13 +103,10 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = [
-            'pickup_address', 
-            'destination_address', 
             'sender_town', 
             'sender_quarter', 
             'receiver_town', 
             'receiver_quarter',
-            'delivery_status', 
             'sender_phone', 
             'receiver_phone', 
             'weight'
@@ -125,20 +120,20 @@ class ArticleForm(forms.ModelForm):
         if 'sender_town' in self.data:
             try:
                 sender_town_name = self.data.get('sender_town')
-                self.fields['sender_quarter'].queryset = Adresse.objects.filter(town=sender_town_name).order_by('quarter')
+                self.fields['sender_quarter'].queryset = Adresse.objects.filter(town=sender_town_name).order_by('quarter').distinct('quarter')
             except (ValueError, TypeError):
                 pass  # Invalid input from the client; ignore and fallback to empty queryset
         elif self.instance.pk:
-            self.fields['sender_quarter'].queryset = Adresse.objects.filter(town=self.instance.sender_town).order_by('quarter')
+            self.fields['sender_quarter'].queryset = Adresse.objects.filter(town=self.instance.sender_town).order_by('quarter').distinct('quarter')
 
         if 'receiver_town' in self.data:
             try:
                 receiver_town_name = self.data.get('receiver_town')
-                self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=receiver_town_name).order_by('quarter')
+                self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=receiver_town_name).order_by('quarter').distinct('quarter')
             except (ValueError, TypeError):
                 pass  # Invalid input from the client; ignore and fallback to empty queryset
         elif self.instance.pk:
-            self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=self.instance.receiver_town).order_by('quarter')
+            self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=self.instance.receiver_town).order_by('quarter').distinct('quarter'        
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order

@@ -45,10 +45,11 @@
                 'town': townId
             },
             success: function (data) {
-                $(quarterFieldId).html("");  // Clear the quarter options
+                var options = "";
                 $.each(data, function(key, value) {
-                    $(quarterFieldId).append($('<option></option>').val(value.id).text(value.quarter));
+                    options += '<option value="' + value.id + '">' + value.quarter + '</option>';
                 });
+                $(quarterFieldId).html(options);  // Clear the quarter options and add new ones
             }
         });
     }
