@@ -36,13 +36,16 @@ admin.site.register(Product, ProductAdmin)
 class ArticleAdmin(admin.ModelAdmin):
     list_display = (
         'id', 
-        'client', 
+        'client_name', 
         'created_at', 
         'get_products', 
         'get_pickup_address', 
         'get_destination_address'
     )
     list_filter = ('client', 'created_at')  # Removed 'products' for now
+    def client_name(self, obj):
+        return obj.client.name if obj.client else 'N/A'
+    client_name.short_description = 'Client'
 
     def get_products(self, obj):
         # Ensure `products` is a ManyToManyField

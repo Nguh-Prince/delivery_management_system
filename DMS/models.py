@@ -65,12 +65,13 @@ class Product(models.Model):
         return self.name
 class ProductType(models.Model):
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=150)
 
     def __str__(self):
             return self.name
 
 class Article(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     sender_town = models.ForeignKey(Adresse, related_name='sender_town', on_delete=models.CASCADE)
     sender_quarter = models.ForeignKey(Adresse, related_name='sender_quarter', on_delete=models.CASCADE)
     receiver_town = models.ForeignKey(Adresse, related_name='receiver_town', on_delete=models.CASCADE)
@@ -78,10 +79,12 @@ class Article(models.Model):
     sender_phone = models.CharField(max_length=15)
     receiver_phone = models.CharField(max_length=15)
     weight = models.FloatField()
+    products = models.ManyToManyField(Product, blank=True)
+    delivery_status = models.CharField(max_length=20, default='Pending')  # Add this field
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
-        return f"Article #{self.id} for {self.client.user.username}"           
+        return f"Article #{self.id} for {self.client.user.username}"
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderItem')
