@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import (
-     ManageArticlesView,register,load_quarters ,notification_page, mark_as_read, deliver_order,view_cart ,NotifyCourierView, ManageRefundsView,
+     ManageArticlesView,register,LoadQuartersView ,notification_page, mark_as_read, deliver_order,view_cart ,NotifyCourierView, ManageRefundsView,
     ViewDeliveriesView, ManageDeliveriesView,AddArticlesView,
     MakeOrderView, ViewOrdersView, ManageCartView,
     UserViewSet, ClientViewSet, CourierViewSet, StorekeeperViewSet, 
@@ -55,7 +55,7 @@ urlpatterns = [
     path('manage-cart/', ManageCartView.as_view(), name='view_cart'),
      path('deliver_order/<int:order_id>/', deliver_order, name='deliver_order'),
     path('api/', include(router.urls)),
-    path('load-quarters/', load_quarters, name='load_quarters'),
+    path('load-quarters/', LoadQuartersView.as_view(), name='load_quarters'),
 ] 
 
 if settings.DEBUG:

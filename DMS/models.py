@@ -71,17 +71,15 @@ class ProductType(models.Model):
             return self.name
 
 class Article(models.Model):
-    client = models.ForeignKey('Client', on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, related_name='articles')
-    # total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    pickup_address = models.CharField(max_length=255)
-    destination_address = models.CharField(max_length=255)
-    sender_phone = models.CharField(max_length=20)
-    receiver_phone = models.CharField(max_length=20)
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    sender_town = models.ForeignKey(Adresse, related_name='sender_town', on_delete=models.CASCADE)
+    sender_quarter = models.ForeignKey(Adresse, related_name='sender_quarter', on_delete=models.CASCADE)
+    receiver_town = models.ForeignKey(Adresse, related_name='receiver_town', on_delete=models.CASCADE)
+    receiver_quarter = models.ForeignKey(Adresse, related_name='receiver_quarter', on_delete=models.CASCADE)
+    sender_phone = models.CharField(max_length=15)
+    receiver_phone = models.CharField(max_length=15)
+    weight = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    delivery_status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('In Transit', 'In Transit'), ('Delivered', 'Delivered'), ('Declined', 'Declined')], default='Pending')
-
+    
     def __str__(self):
         return f"Article #{self.id} for {self.client.user.username}"           
 class Order(models.Model):

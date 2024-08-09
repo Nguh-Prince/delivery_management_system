@@ -34,12 +34,28 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'client', 'created_at', 'get_products')
-    list_filter = ('client', 'created_at', 'products')  # Assuming 'products' is a related field
+    list_display = (
+        'id', 
+        'client', 
+        'created_at', 
+        'get_products', 
+        'get_pickup_address', 
+        'get_destination_address'
+    )
+    list_filter = ('client', 'created_at')  # Removed 'products' for now
 
     def get_products(self, obj):
-        return ", ".join([p.name for p in obj.products.all()])
+        # Ensure `products` is a ManyToManyField
+        return ", ".join([p.name for p in obj.products.all()]) if obj.products.exists() else "No Products"
     get_products.short_description = 'Products'
+
+    def get_pickup_address(self, obj):
+        return obj.pickup_address if obj.pickup_address else 'N/A'
+    get_pickup_address.short_description = 'Pickup Address'
+
+    def get_destination_address(self, obj):
+        return obj.destination_address if obj.destination_address else 'N/A'
+    get_destination_address.short_description = 'Destination Address'
 
 admin.site.register(Article, ArticleAdmin)
 

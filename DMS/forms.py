@@ -114,26 +114,40 @@ class ArticleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Initialize empty querysets
         self.fields['sender_quarter'].queryset = Adresse.objects.none()
         self.fields['receiver_quarter'].queryset = Adresse.objects.none()
-
+        
         if 'sender_town' in self.data:
             try:
                 sender_town_name = self.data.get('sender_town')
-                self.fields['sender_quarter'].queryset = Adresse.objects.filter(town=sender_town_name).order_by('quarter').distinct('quarter')
+                # Fetch all quarters for the selected sender town
+                sender_quarters = Adresse.objects.filter(town=sender_town_name).order_by('quarter')
+                # Create a list of unique quarters
+                unique_sender_quarters = sorted(set(sender_quarters.values_list('quarter', flat=True)))
+                self.fields['sender_quarter'].queryset = Adresse.objects.filter(quarter__in=unique_sender_quarters)
             except (ValueError, TypeError):
-                pass  # Invalid input from the client; ignore and fallback to empty queryset
+                pass
         elif self.instance.pk:
+            # Handle instance case
             self.fields['sender_quarter'].queryset = Adresse.objects.filter(town=self.instance.sender_town).order_by('quarter').distinct('quarter')
 
         if 'receiver_town' in self.data:
             try:
                 receiver_town_name = self.data.get('receiver_town')
-                self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=receiver_town_name).order_by('quarter').distinct('quarter')
+                # Fetch all quarters for the selected receiver town
+                receiver_quarters = Adresse.objects.filter(town=receiver_town_name).order_by('quarter')
+                # Create a list of unique quarters
+                unique_receiver_quarters = sorted(set(receiver_quarters.values_list('quarter', flat=True)))
+                self.fields['receiver_quarter'].queryset = Adresse.objects.filter(quarter__in=unique_receiver_quarters)
             except (ValueError, TypeError):
-                pass  # Invalid input from the client; ignore and fallback to empty queryset
+                pass
         elif self.instance.pk:
-            self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=self.instance.receiver_town).order_by('quarter').distinct('quarter'        
+            # Handle instance case
+            self.fields['receiver_quarter'].queryset = Adresse.objects.filter(town=self.instance.receiver_town).order_by('quarter').distinct('quarter')
+
+
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order

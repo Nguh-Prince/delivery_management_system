@@ -1,5 +1,6 @@
 # core/views.py
 from .utils import notify_courier
+from django.views.generic.edit import FormView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from .models import User,Cart,Adresse,OrderItem ,Refund, Client, Courier, Storekeeper, Product, Article, Order, Delivery, Notification, Review
@@ -30,6 +31,20 @@ User = get_user_model()
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'dms/product_list.html', {'products': products})
+
+class ArticleCreateView(FormView):
+    form_class = ArticleForm
+    template_name = 'your_template.html'
+    success_url = '/success/'  # Adjust as needed
+
+    def form_valid(self, form):
+        # Process the form data here
+        form.save()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        # Handle form errors here
+        return self.render_to_response(self.get_context_data(form=form))
 
 @login_required
 def add_to_cart(request, product_id):
@@ -74,11 +89,13 @@ def add_to_cart(request, product_id):
     
     return redirect('view_cart')
 
-def load_quarters(request):
-    town_name = request.GET.get('town')
-    quarters = Adresse.objects.filter(town=town_name).order_by('quarter')
-    return JsonResponse(list(quarters.values('id', 'quarter')), safe=False)
-
+class LoadQuartersView(View):
+    def get(self, request, *args, **kwargs):
+        town = request.GET.get('town')
+        if town:
+            quarters = Adresse.objects.filter(town=town).values('id', 'quarter')
+            return JsonResponse(list(quarters), safe=False)
+        return JsonResponse([], safe=False)
 class OrderConfirmationView(TemplateView):
     template_name = 'dms/order_confirmation.html'
 
