@@ -33,6 +33,10 @@ class Client(models.Model):
     address = models.TextField()
     def __str__(self):
         return self.user.username
+    
+    @property
+    def name(self):
+        return self.user.username
 
 class Courier(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -85,6 +89,15 @@ class Article(models.Model):
 
     def __str__(self):
         return f"Article #{self.id} for {self.client.user.username}"
+
+    @property
+    def pickup_address(self):
+        return self.sender_quarter
+
+    @property
+    def destination_address(self):
+        return self.receiver_quarter
+    
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderItem')

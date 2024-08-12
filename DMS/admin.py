@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Client, Courier, Storekeeper, Product, Article, Order, OrderItem, Delivery, Notification, Review
+from django.utils.html import format_html
+from .models import User, Client, Courier, Storekeeper, Product, Article, Order, OrderItem, Delivery, Notification, Review, ProductType, Adresse
 
 # Custom admin for User model to handle custom fields
 class UserAdmin(admin.ModelAdmin):
@@ -27,9 +28,16 @@ class StorekeeperAdmin(admin.ModelAdmin):
 admin.site.register(Storekeeper, StorekeeperAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'category')
+    list_display = ('image_tag', 'name', 'price', 'category')
+
     search_fields = ('name', 'category')
     list_filter = ('category',)
+
+    def image_tag(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 45px; height:auto;" />'.format(obj.image.url))
+        return "-"
+    image_tag.short_description = 'Image'
 
 admin.site.register(Product, ProductAdmin)
 
@@ -66,9 +74,6 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 1
 
-from django.contrib import admin
-from .models import ProductType
-
 class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ('name',)  # Adjust this to your actual fields
     list_filter = ('name',)
@@ -103,3 +108,4 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('rating',)
 
 admin.site.register(Review, ReviewAdmin)
+admin.site.register(Adresse)
